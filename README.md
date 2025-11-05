@@ -51,7 +51,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 In the root directory:
 
 ```bash
-cp .env.local .env.local
+cp .env.example .env.local
 ```
 
 Start the development server:
