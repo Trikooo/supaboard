@@ -1,56 +1,58 @@
 "use client";
-
 import { cn } from "@/lib/utils";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import SupaboardLogo from "@/components/logo";
+import { FaGoogle, FaDiscord } from "react-icons/fa";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { useState } from "react";
+import { toast } from "sonner";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+
+const signUpSchema = z.object({
+  email: z.email({ message: "Invalid email address" }),
+});
+type SignUpFormData = z.infer<typeof signUpSchema>;
 
 export function SignUpForm({
   className,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [repeatPassword, setRepeatPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+}: React.ComponentProps<"div">) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const { control, handleSubmit, reset } = useForm<SignUpFormData>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const supabase = createClient();
+  const onSubmit = async (values: SignUpFormData) => {
     setIsLoading(true);
-    setError(null);
-
-    if (password !== repeatPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
 
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
-        },
+      const supabase = createClient();
+      const email = values.email;
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email,
       });
       if (error) throw error;
-      router.push("/auth/sign-up-success");
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      reset();
+      router.push(`/auth/verify-otp?email=${email}`);
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.message || "Sign up failed, please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -58,63 +60,68 @@ export function SignUpForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Sign up</CardTitle>
-          <CardDescription>Create a new account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignUp}>
-            <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
+        <FieldGroup>
+          <div className="flex flex-col items-center gap-2 text-center">
+            <a
+              href="#"
+              className="flex flex-col items-center gap-2 font-medium"
+            >
+              <SupaboardLogo width={180} height={45} className="mb-2" />
+              <span className="sr-only">Supaboard</span>
+            </a>
+            <h1 className="text-xl font-bold">Create a New Account</h1>
+            <FieldDescription>
+              Already have an account? <a href="/login">Sign in</a>
+            </FieldDescription>
+          </div>
+
+          <Controller
+            name="email"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid || undefined}>
+                <FieldLabel htmlFor="email">Email</FieldLabel>
                 <Input
+                  {...field}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={fieldState.invalid || undefined}
+                  disabled={isLoading}
                 />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                <FieldError
+                  errors={fieldState.error ? [fieldState.error] : undefined}
                 />
-              </div>
-              <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
-                </div>
-                <Input
-                  id="repeat-password"
-                  type="password"
-                  required
-                  value={repeatPassword}
-                  onChange={(e) => setRepeatPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-sm text-red-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "Creating an account..." : "Sign up"}
-              </Button>
-            </div>
-            <div className="mt-4 text-center text-sm">
-              Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
-                Login
-              </Link>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+              </Field>
+            )}
+          />
+
+          <Button
+            type="submit"
+            loading={isLoading ? "Signing up..." : undefined}
+          >
+            Sign Up
+          </Button>
+
+          <FieldSeparator>Or</FieldSeparator>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Button variant="outline" type="button">
+              <FaDiscord size={16} />
+              Continue with Discord
+            </Button>
+            <Button variant="outline" type="button" disabled={isLoading}>
+              <FaGoogle size={16} />
+              Continue with Google
+            </Button>
+          </div>
+        </FieldGroup>
+      </form>
+      <FieldDescription className="px-6 text-center">
+        By continuing, you accept our <a href="#">Terms</a> and{" "}
+        <a href="#">Policies</a>.
+      </FieldDescription>
     </div>
   );
 }
