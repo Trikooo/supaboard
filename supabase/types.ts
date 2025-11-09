@@ -16,9 +16,9 @@ export type Database = {
     Tables: {
       issues: {
         Row: {
-          assigned_to: string | null
+          assignee_id: string | null
           created_at: string | null
-          created_by: string | null
+          creator_id: string | null
           description: string | null
           id: string
           priority: Database["public"]["Enums"]["issue_priority"] | null
@@ -28,9 +28,9 @@ export type Database = {
           updated_at: string | null
         }
         Insert: {
-          assigned_to?: string | null
+          assignee_id?: string | null
           created_at?: string | null
-          created_by?: string | null
+          creator_id?: string | null
           description?: string | null
           id?: string
           priority?: Database["public"]["Enums"]["issue_priority"] | null
@@ -40,9 +40,9 @@ export type Database = {
           updated_at?: string | null
         }
         Update: {
-          assigned_to?: string | null
+          assignee_id?: string | null
           created_at?: string | null
-          created_by?: string | null
+          creator_id?: string | null
           description?: string | null
           id?: string
           priority?: Database["public"]["Enums"]["issue_priority"] | null
@@ -64,7 +64,7 @@ export type Database = {
       projects: {
         Row: {
           created_at: string | null
-          created_by: string | null
+          creator_id: string | null
           description: string | null
           id: string
           name: string
@@ -73,7 +73,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
-          created_by?: string | null
+          creator_id?: string | null
           description?: string | null
           id?: string
           name: string
@@ -82,7 +82,7 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
-          created_by?: string | null
+          creator_id?: string | null
           description?: string | null
           id?: string
           name?: string
@@ -105,6 +105,7 @@ export type Database = {
           id: string
           role: Database["public"]["Enums"]["role"]
           team_id: string
+          updated_at: string | null
           user_id: string
         }
         Insert: {
@@ -112,6 +113,7 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["role"]
           team_id: string
+          updated_at?: string | null
           user_id: string
         }
         Update: {
@@ -119,6 +121,7 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["role"]
           team_id?: string
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: [
@@ -195,7 +198,41 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      can_access_teams: { Args: { team_id: string }; Returns: boolean }
+      can_access_workspace: { Args: { workspace_id: string }; Returns: boolean }
+      can_add_team_member: { Args: { team_id: string }; Returns: boolean }
+      can_create_issue: { Args: { project_id: string }; Returns: boolean }
+      can_create_project: { Args: { team_id: string }; Returns: boolean }
+      can_create_team: { Args: { workspace_id: string }; Returns: boolean }
+      can_delete_issue: { Args: { issue_id: string }; Returns: boolean }
+      can_delete_project: { Args: { project_id: string }; Returns: boolean }
+      can_delete_team: { Args: { team_id: string }; Returns: boolean }
+      can_remove_team_member: { Args: { team_id: string }; Returns: boolean }
+      can_update_issue: { Args: { issue_id: string }; Returns: boolean }
+      can_update_project: { Args: { project_id: string }; Returns: boolean }
+      can_update_team: { Args: { team_id: string }; Returns: boolean }
+      can_update_team_member: { Args: { team_id: string }; Returns: boolean }
+      can_view_issue: { Args: { issue_id: string }; Returns: boolean }
+      can_view_project: { Args: { project_id: string }; Returns: boolean }
+      can_view_team_members: { Args: { team_id: string }; Returns: boolean }
+      get_user_admin_team_ids: {
+        Args: { user_uuid: string }
+        Returns: {
+          team_id: string
+        }[]
+      }
+      get_user_project_ids: {
+        Args: { user_uuid: string }
+        Returns: {
+          project_id: string
+        }[]
+      }
+      get_user_team_ids: {
+        Args: { user_uuid: string }
+        Returns: {
+          team_id: string
+        }[]
+      }
     }
     Enums: {
       issue_priority: "low" | "medium" | "high" | "urgent"
