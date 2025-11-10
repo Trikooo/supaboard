@@ -111,11 +111,21 @@ export function LoginForm({
           </Button>
           <FieldSeparator>Or</FieldSeparator>
           <div className="grid gap-4 sm:grid-cols-2">
-            <Button variant="outline" type="button" disabled={isLoading}>
+            <Button
+              variant="outline"
+              type="button"
+              disabled={true}
+              className="cursor-not-allowed"
+            >
               <FaDiscord />
               Continue with Discord
             </Button>
-            <Button variant="outline" type="button" disabled={isLoading}>
+            <Button
+              variant="outline"
+              type="button"
+              disabled={true}
+              className="cursor-not-allowed"
+            >
               <FaGoogle />
               Continue with Google
             </Button>

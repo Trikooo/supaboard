@@ -73,7 +73,8 @@ export function SignUpForm({
             </a>
             <h1 className="text-xl font-bold">Create a New Account</h1>
             <FieldDescription>
-              Already have an account? <Link href="/login">
+              Already have an account?{" "}
+              <Link href="/login">
                 <Button variant="link" className="p-0">
                   Sign in
                 </Button>
@@ -112,11 +113,21 @@ export function SignUpForm({
           <FieldSeparator>Or</FieldSeparator>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Button variant="outline" type="button">
+            <Button
+              variant="outline"
+              type="button"
+              disabled={true}
+              className="cursor-not-allowed"
+            >
               <FaDiscord size={16} />
               Continue with Discord
             </Button>
-            <Button variant="outline" type="button" disabled={isLoading}>
+            <Button
+              variant="outline"
+              type="button"
+              disabled={true}
+              className="cursor-not-allowed"
+            >
               <FaGoogle size={16} />
               Continue with Google
             </Button>
