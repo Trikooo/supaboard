@@ -48,7 +48,6 @@ export function VerifyOtpForm({ className, ...props }: { className?: string }) {
     setIsLoading(true);
     const token = values.token;
     try {
-      // TODO: Implement OTP verification
       const supabase = createClient();
       const { data, error } = await supabase.auth.verifyOtp({
         type: "email",
