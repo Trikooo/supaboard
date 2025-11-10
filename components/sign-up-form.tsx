@@ -19,6 +19,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const signUpSchema = z.object({
   email: z.email({ message: "Invalid email address" }),
@@ -72,7 +73,11 @@ export function SignUpForm({
             </a>
             <h1 className="text-xl font-bold">Create a New Account</h1>
             <FieldDescription>
-              Already have an account? <a href="/login">Sign in</a>
+              Already have an account? <Link href="/login">
+                <Button variant="link" className="p-0">
+                  Sign in
+                </Button>
+              </Link>
             </FieldDescription>
           </div>
 
