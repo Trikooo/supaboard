@@ -4,12 +4,8 @@ import { Button } from "./ui/button";
 
 const navElements = {
   links: [
-    { label: "Product", url: "#product" },
-    { label: "Resources", url: "#resources" },
-    { label: "Pricing", url: "#pricing" },
-    { label: "Customers", url: "#customers" },
-    { label: "Now", url: "#now" },
-    { label: "Contact", url: "#contact" },
+    { label: "Product", url: "/#product-description" },
+    { label: "Contact", url: "/contact" },
   ] as { label: string; url: string }[],
 };
 
@@ -44,10 +40,10 @@ export default function Navbar({ isLoggedIn }: NavbarProps) {
             </Link>
           ) : (
             <>
-              <Link href="/login">
+              <Link href="/auth/login">
                 <Button variant="ghost">Log in</Button>
               </Link>
-              <Link href="/sign-up">
+              <Link href="/auth/sign-up">
                 <Button>Sign up</Button>
               </Link>
             </>

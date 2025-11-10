@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 export default function ProductDescription() {
   return (
-    <section className="min-h-screen  px-20 py-20">
+    <section id="product-description" className="min-h-screen  px-20 py-20">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-6 text-center space-y-6">

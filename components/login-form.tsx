@@ -74,7 +74,7 @@ export function LoginForm({
             <h1 className="text-xl font-bold">Sign in to Your Account</h1>
             <FieldDescription>
               Don't have an account?{" "}
-              <Link href="/sign-up">
+              <Link href="/auth/sign-up">
                 <Button variant="link" className="p-0">
                   Sign up
                 </Button>

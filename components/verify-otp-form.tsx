@@ -34,7 +34,7 @@ export function VerifyOtpForm({ className, ...props }: { className?: string }) {
   const searchParams = useSearchParams();
   const email = searchParams.get("email");
   if (!email) {
-    router.push("/login");
+    router.push("/auth/login");
   }
   const [isLoading, setIsLoading] = useState(false);
   const { control, handleSubmit } = useForm<VerifyOtpFormData>({

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BackgroundBeams } from "../ui/background-beams";
 import { Button } from "../ui/button";
 
@@ -15,8 +16,12 @@ export default function Hero() {
           management system.
         </p>
         <div className="flex items-center justify-center gap-4">
-          <Button>Get started</Button>
-          <Button variant="outline">Learn more</Button>
+          <Link href="/auth/sign-up">
+            <Button>Get started</Button>
+          </Link>
+          <Link href="#product-description">
+            <Button variant="outline">Learn more</Button>
+          </Link>
         </div>
       </div>
     </>
