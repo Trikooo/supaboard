@@ -2,14 +2,16 @@
 CREATE POLICY "Users can view their workspaces"
 ON public.workspaces FOR SELECT
 USING (
-  public.can_access_workspace(id)
+  owner_id = auth.uid()
+  OR public.can_access_workspace(id)
 );
 
 
--- 2. Check workspace creation access: any authenticated user can create a workspace
+-- 2. Check workspace creation access: any authenticated user can create a workspace for themselves
 CREATE POLICY "Users can create workspaces"
-ON public.workspaces FOR INSERT
-WITH CHECK (auth.uid() IS NOT NULL);
+ON public.workspaces
+FOR INSERT
+WITH CHECK (owner_id = auth.uid());
 
 -- 3. Check workspace update access: only owners can update their workspaces
 CREATE POLICY "Owners can update their workspaces"
