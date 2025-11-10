@@ -14,7 +14,6 @@ import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { createWorkspace } from "@/actions/workspaces";
 
-
 export function CreateWorkspaceForm() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +38,7 @@ export function CreateWorkspaceForm() {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button>
-          <Plus className="mr-2 h-4 w-4" />
+          <Plus className="size-4" />
           New Workspace
         </Button>
       </DialogTrigger>
