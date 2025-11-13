@@ -31,8 +31,6 @@ The goal is simple: show how Supabase Auth, Postgres, Realtime, Storage, and Edg
 
 ## Getting Started
 
-This project is built with the Supabase Next.js starter [template](https://supabase.com/docs/guides/getting-started/quickstarts/nextjs).
-
 Clone and set up the project:
 
 ```bash
